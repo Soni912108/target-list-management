@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+    
+        /* Page Titles */
+        h2.title {
+            font-size: 40px;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+    
+        h2.targetLists,
+        h2.targetUsersTable {
+            font-size: 28px;
+            color: #444;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    
+        /* button styling */
+        button {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            font-size: 16px;
+            margin: 5px;
+        }
+    
+        /* Delete buttons */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+    
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    
+        /* Rename button */
+        .rename-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+    
+        .rename-btn:hover {
+            background-color: #e67e22;
+        }
+    
+        /* Adding buttons */
+        .add-user-btn,
+        .upload-csv-btn,
+        .add-new-target-list {
+            background-color: #2ecc71;
+            color: white;
+        }
+    
+        .add-user-btn:hover,
+        .upload-csv-btn:hover,
+        .add-new-target-list:hover {
+            background-color: #27ae60;
+        }
+    
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+    
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    
+        /* Add User Modal Styling */
+        #addUserModal {
+            display: none;
+            position: fixed; 
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        #addUserModal .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+            max-height: 80%; 
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #addUserModal .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #addUserModal .modal-content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 4px;
+        }
+
+        #addUserModal .modal-content::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+
+        /* Modal Close Button */
+        #addUserModal .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #addUserModal .close:hover,
+        #addUserModal .close:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Upload CSV Modal Styling */
+        #uploadCsvModal {
+            display: none;
+            position: fixed; 
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        #uploadCsvModal .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #uploadCsvModal .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #uploadCsvModal .close:hover,
+        #uploadCsvModal .close:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Forms inside modals */
+        form {
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"],
+        input[type="button"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover,
+        input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+    
+</head>
+<body>
+    <h2 class="title">Welcome to List Management</h2>
+    <!-- Error message div -->
+    <div id="errorDiv" class="error-message"></div>
+    <!-- Section to Display All Target Lists -->
+    <button onclick="addNewTargetList()" class="add-new-target-list">Add New TargetList</button>
+    <h2 class="targetLists">Existing Target Lists</h2>
+    <table id="targetListsTable">
+        <thead>
+            <tr>
+                <th>List ID</th>
+                <th>List Name</th>
+                <th>Target List Actions</th>
+                <th>Add User</th>
+            </tr>
+        </thead>
+        <tbody id="targetLists"></tbody>
+    </table>
+
+    <br></br>
+
+    <!-- Section to Display All Users -->
+    <h2 class="targetUsersTable">Existing Users</h2>
+    <table id="targetUsersTable">
+        <thead>
+            <tr>
+                <th>List ID</th>
+                <th>User ID</th>
+                <th>User Name</th>
+                <th>User Surname</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Job Position</th>
+                <th>Delete User from List</th>
+            </tr>
+        </thead>
+        <tbody id="targetUsers"></tbody>
+    </table>
+
+    <br></br>
+    <br></br>
+
+    <!-- Modal for adding a single user -->
+    <div id="addUserModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add User</h2>
+            <form id="addUserForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name"><br><br>
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname"><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br><br>
+                <label for="phone">Phone:</label>
+                <input type="number" id="phone" name="phone" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <label for="jobPosition">Job Position:</label>
+                <input type="text" id="jobPosition" name="jobPosition"><br><br>
+                <input type="submit" value="Add User" style="cursor: pointer;">
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for uploading a CSV file that contains new users-->
+    <div id="uploadCsvModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeCSVModal()">&times;</span>
+            <h2>Upload file</h2>
+            <form id="uploadCsvForm" enctype="multipart/form-data">
+                <ul>
+                    Notes:
+                    <li>
+                        If user(email) is already present under this target list, it will be ignored.
+                    </li>
+                    <li>
+                        Make sure that the csv file has all the headers in order: "Name", "Surname", "Email", "Phone", "Job Position".
+                    </li>
+                </ul>
+                <!-- Only accept .csv files -->
+                <input type="file" id="csvFile" name="csvFile" accept=".csv"><br><br>
+                <input type="button" value="Upload" style="cursor: pointer;" onclick="submitCsv()">
+            </form>
+        </div>
+    </div>
+
+</body>
+<script>
+    async function getTargetList() {
+        try {
+            const response = await fetch('/app/get_lists/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch target lists. Status: ' + response.status);
+            }
+            const data = await response.json();
+            let targetListsElement = document.getElementById('targetLists');
+            // Clear existing table rows
+            targetListsElement.innerHTML = '';
+            // Check if there are any lists
+            if (Array.isArray(data) && data.length > 0) {
+                data.forEach(list => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${list.id}</td>
+                        <td>${list.name}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteTargetList(${list.id})">Delete</button>
+                            <button class="rename-btn" onclick="renameTargetList(${list.id})">Rename</button>
+                        </td>
+                        <td>
+                            <button class="add-user-btn" onclick="addUser(${list.id})">Add User</button>
+                            <button class="upload-csv-btn" id="csvFileButton" onclick="uploadCsv(${list.id})">Upload Csv</button>
+                        </td>
+                    `;
+                    targetListsElement.appendChild(row);
+                });
+            } else {
+                // If no lists, show a single row with "No lists added yet"
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="3">No lists added yet</td>
+                `;
+                targetListsElement.appendChild(row);
+            }
+
+        } catch (error) {
+            console.error('Error fetching target lists:', error);
+            document.getElementById('errorDiv').textContent = error.message;
+        }
+    }
+
+    //function to add a new target list
+    async function addNewTargetList() {
+        let newListName = prompt('Enter name for the new target list:', '');
+        
+        if (newListName.trim() === '') {
+            alert('Please enter a name for the target list.');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`/app/add_list/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ new_list_name: newListName }) 
+            });
+            
+            const result = await response.json();
+
+            // Check if the response was not OK
+            if (!response.ok) {
+                // Display the error message from the server
+                document.getElementById('errorDiv').textContent = result.error;
+            } else {
+                alert('Target list added successfully');
+                getTargetList();
+                getTargetUsers();
+                document.getElementById('errorDiv').textContent = '';
+            }
+
+        } catch (error) {
+            console.error('Error adding new target list:', error);
+            document.getElementById('errorDiv').textContent = error.message;
+        }
+    }
+
+    //function to delete a target list
+    async function deleteTargetList(listId) {
+        // Confirm the deletion before sending the request
+        if (!window.confirm('By deleting the target list you will delete all associated users.Continue?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/app/delete_target_list/${listId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to delete target list. Status: ' + response.status);
+            }
+
+            // Alert the user that the list was successfully deleted
+            alert('Target list deleted successfully');
+            document.getElementById('errorDiv').textContent = ''
+            getTargetList();
+            getTargetUsers();
+
+        } catch (error) {
+            console.error('Error deleting target list:', error);
+            document.getElementById('errorDiv').textContent = error.message;
+        }
+        }
+    
+    //function to rename a target list
+    async function renameTargetList(listId) {
+        // Prompt the user for a new name
+        let newName = prompt('Enter new name for the target list:', '');
+
+        // If user didn't enter anything, show an error message
+        if (newName.trim() === '') {
+            alert('Please enter a new name for the target list.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/app/rename_target_list/${listId}`, {
+                method: 'UPDATE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ new_name: newName })
+            });
+
+            // Parse the response JSON to get the server's message or error
+            const result = await response.json();
+
+            // Check if the response was not OK
+            if (!response.ok) {
+                // Display the error message from the server
+                document.getElementById('errorDiv').textContent = result.error;
+            } else {
+                alert('Target list name updated successfully');
+                getTargetList();
+                getTargetUsers();
+                document.getElementById('errorDiv').textContent = '';
+            }
+
+        } catch (error) {
+            console.error('Error renaming target list:', error);
+            document.getElementById('errorDiv').textContent = 'An error occurred. Please try again.';
+        }
+    }
+
+
+
+    //function to display all users of each target list
+    async function getTargetUsers() {
+        try {
+            const response = await fetch(`/app/get_users/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch target users. Status: ' + response.status);
+            }
+
+            const data = await response.json();
+            let targetUsersElement = document.getElementById('targetUsers');
+            // Clear existing table rows
+            targetUsersElement.innerHTML = '';
+            
+            //if an empty array is returned then say "No users found"
+            if (Array.isArray(data) && data.length === 0) {
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="8">No users found</td>
+                `;
+                targetUsersElement.appendChild(row);
+                return;
+            }
+
+            // Check if there are any users per list
+            data.forEach(list => {
+                // If there are users, display each one in a separate row
+                if (Array.isArray(list.users) && list.users.length > 0 && list.users[0] !== "No users") {
+                    list.users.forEach(user => {
+                        let row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${list.id}</td> 
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.surname}</td> 
+                            <td>${user.email}</td> 
+                            <td>${user.phone}</td>
+                            <td>${user.job_position}
+                            <td>
+                                <button class="delete-btn" onclick="deleteUserFromTargetList(${list.id}, ${user.id})">Delete User</button>
+                            </td>
+                        `;
+                        targetUsersElement.appendChild(row);
+                    });
+                } else {
+                    // If no users, show a message to indicate
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td colspan="8">No users for Target List with name "${list.name}"</td>
+                    `;
+                    targetUsersElement.appendChild(row);
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching target users:', error);
+            document.getElementById('errorDiv').textContent = error.message;
+        }
+    }
+
+    // Function to open the modal and prepare for CSV upload
+    function uploadCsv(listId) {
+        // Store the list ID in a data attribute for use when submitting
+        document.getElementById('uploadCsvForm').setAttribute('data-list-id', listId);
+        document.getElementById('uploadCsvModal').style.display = 'block'; // Opening the modal
+    }
+
+    // Function to close the csv modal
+    function closeCSVModal() {
+        document.getElementById('uploadCsvModal').style.display = 'none';
+    }
+
+    // Function to submit the CSV file to the server
+    async function submitCsv() {
+        const form = document.getElementById('uploadCsvForm');
+        const listId = form.getAttribute('data-list-id'); // Retrieve the list ID from uploadCsvForm attribute
+        const fileInput = document.getElementById('csvFile');
+
+        if (!fileInput.files.length) {
+            alert('Please select a CSV file to upload.');
+            return;
+        }
+        //FormData object to hold the end user chosen file data as key-value pair ('csvFile': actualCSVFile)
+        const formData = new FormData();
+        formData.append('csvFile', fileInput.files[0]);
+
+        try {
+            // Send the file to the server
+            const response = await fetch(`/app/upload_csv/${listId}`, {
+                method: 'POST',
+                body: formData 
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload CSV. Status: ' + response.status);
+            }
+
+            alert('CSV uploaded successfully!');
+            closeCSVModal(); // Close the modal after successful upload
+            getTargetList(); // Refresh the target list
+            getTargetUsers(); // Refresh the target users list
+        } catch (error) {
+            console.error('Error uploading CSV:', error);
+            alert('An error occurred while uploading the CSV.');
+        }
+    }
+
+        
+    //function to add a new single user to a current target list
+    async function addUser(listId) {
+        // Clear any existing form data
+        document.getElementById('addUserForm').reset();
+        document.getElementById('addUserModal').style.display = 'flex'; // Show the modal 
+
+        // Handle form submission
+        document.getElementById('addUserForm').onsubmit = async function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById('name').value;
+            let surname = document.getElementById('surname').value;
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('phone').value;
+            let jobPosition = document.getElementById('jobPosition').value;
+
+            // Additional validation to ensure the phone number is numeric
+            if (isNaN(phone) || phone.trim() === '') {
+                alert('Please enter a valid phone number.');
+                return;
+            }
+
+            if (name.trim() === '' || surname.trim() === '' || email.trim() === '' || jobPosition.trim() === '') {
+                alert('Please fill all required fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/app/add_user/${listId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        surname: surname,
+                        email: email,
+                        phone: phone,
+                        job_position: jobPosition
+                    })
+                });
+
+                const data = await response.json(); // Parse the JSON response from the server
+
+                if (response.ok) {
+                    // Show the success message
+                    alert(data.message || 'User added successfully');
+                    closeModal(); // Close the modal after successful submission
+                    getTargetList(); // Refresh the list of target lists
+                    getTargetUsers(); // Refresh the list of target users
+                } else {
+                    // Show the error message
+                    alert(data.error || 'Failed to add user. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error adding new user:', error);
+                document.getElementById('errorDiv').textContent = error.message;
+            }
+        };
+    }
+
+
+    // Function to close the addUserModal modal
+    function closeModal() {
+        document.getElementById('addUserModal').style.display = 'none'; // Hide the modal
+    }
+
+    // Function to delete a target user from a target list
+    async function deleteUserFromTargetList(listId, userId) {
+        // Confirm the deletion before sending the request
+        if (!window.confirm('Do you want to delete this user?')) {
+            return;
+        }
+        try {
+            const response = await fetch(`/app/delete_user_from_list/${listId}/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete user. Status: ' + response.status);
+            }
+
+            // Alert the end user that the target user was successfully deleted
+            alert('User deleted successfully');
+            getTargetList();
+            getTargetUsers();
+
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            document.getElementById('errorDiv').textContent = error.message;
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Call the functions when the page loads
+        getTargetList();
+        getTargetUsers();
+    });
+</script>
+</html>
