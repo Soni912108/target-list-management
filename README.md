@@ -101,13 +101,13 @@
     3. The app.run(...) command launches the Flask development server with debugging enabled, making it accessible on all network interfaces (host='0.0.0.0') and setting it to run on port 8000. The use_reloader=True option allows the server to automatically reload if there are changes in the code.
 
 
-```python
-if __name__ == '__main__':
-    # Create database tables
-    with app.app_context():
-        db.create_all()
-
-    # Run the Flask app
-    app.run(debug=True, host='0.0.0.0', port=8000, use_reloader=True)
+    ```python
+    if __name__ == '__main__':
+        # Create database tables
+        with app.app_context():
+            db.create_all()
+    
+        # Run the Flask app
+        app.run(debug=True, host='0.0.0.0', port=8000, use_reloader=True)
 
 
