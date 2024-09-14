@@ -28,8 +28,8 @@
          ```bash
          python -m pip install requirements.txt
          ```
-4. **Run the command python app.py to run the application**
-5. Access the link (`http://127.0.0.1:8000`) in any browser**
+4. **Run the command `python app.py` to run the application.**
+5. **Access the link (`http://127.0.0.1:8000`) in any browser.**
 <br></br>
 
 
