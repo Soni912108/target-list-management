@@ -1,3 +1,38 @@
+### How to Run the Application Locally after cloning the repo:
+
+1. **Navigate to the root of the `app.py` directory**.
+2. **Create and activate a virtual environment to store the required packages**:
+   
+   - **For Windows**:
+     ```bash
+     py -m venv name_of_the_venv
+     name_of_the_venv\Scripts\activate
+     ```
+
+   - **For macOS/Linux**:
+     ```bash
+     python3 -m venv name_of_the_venv
+     source name_of_the_venv/bin/activate
+     ```
+
+3. **Install the dependencies from the `requirements.txt` file**:
+
+   
+    - **For Windows**:
+        ```bash
+            pip install -r requirements.txt
+        ```
+
+    
+    - **For macOS/Linux**
+         ```bash
+         python -m pip install requirements.txt
+         ```
+4. **Run the command python app.py to run the application**
+5. Access the link (`http://127.0.0.1:8000`) in any browser**
+<br></br>
+<br></br>
+
 ### Explanation of the Code within `app.py`
 
 #### 1. `@app.route('/', methods=['GET'])`:
