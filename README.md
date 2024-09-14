@@ -31,7 +31,30 @@
 4. **Run the command python app.py to run the application**
 5. Access the link (`http://127.0.0.1:8000`) in any browser**
 <br></br>
+
+
+### Explanation of the Code within `database.py`
+
+This file defines the database structure for the application using SQLAlchemy with Flask. 
+It includes three models: `TargetList`, `TargetUser`, and `TargetListUser`.
+
+1. **`TargetList` Model**:
+   - Represents a list of target users.
+   - Contains an `id` (primary key) and a `name` (unique, not nullable).
+   - Establishes a one-to-many relationship with the `TargetListUser` model to handle associated users.
+
+2. **`TargetUser` Model**:
+   - Represents a user that can be associated with multiple target lists.
+   - Contains user details: `id`, `name`, `surname`, `email`, `phone`, and `job_position`.
+   - Establishes a one-to-many relationship with the `TargetListUser` model to handle multiple list associations.
+
+3. **`TargetListUser` Model**:
+   - Establishes a many-to-many relationship between `TargetList` and `TargetUser` models.
+   - Contains foreign keys (`target_list_id` and `target_user_id`) to link users and lists.
+
+The `cascade="all, delete-orphan"` option ensures that when a `TargetList` or `TargetUser` is deleted, its associations are also removed automatically.
 <br></br>
+
 
 ### Explanation of the Code within `app.py`
 
