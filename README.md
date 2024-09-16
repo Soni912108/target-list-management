@@ -108,15 +108,6 @@ The `cascade="all, delete-orphan"` option ensures that when a `TargetList` or `T
     4. Collects all users' dictionaries and appends them to the corresponding list data.
     5. Returns the list data as a JSON response.
 
-#### 6. `@app.route('/app/get_users/', methods=['GET'])`:
-- **Purpose:** Retrieves all users associated with each list from the database and returns them as a JSON response.
-- **Process:**
-    1. Retrieves all target lists using `TargetList.query.all()`. If no target lists are found, returns an empty JSON response.
-    2. Iterates over each list and retrieves all users associated with it using `TargetListUser.query.join(TargetUser)`.
-    3. For each user, creates a dictionary with their ID, name, surname, email, phone, and job position.
-    4. Adds the user's dictionary to the list of dictionaries representing users associated with the target list.
-    5. Returns the list of users as a JSON response using `jsonify()`.
-
 #### 7. `@app.route('/app/add_user_to_list/<int:list_id>', methods=['POST'])`:
 - **Purpose:** Adds a new user to a specified target list in the database and returns a success message.
 - **Process:**
